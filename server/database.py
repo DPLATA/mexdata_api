@@ -4,10 +4,12 @@ from decouple import config
 MONGO_URI = config('MONGO_URI')
 client = motor.AsyncIOMotorClient(MONGO_URI)
 db = client[config('MONGO_DB')]
-collection = db.get_collection(config('MONGO_HITTING_COLLECTION'))
+player_hitting_collection = db.get_collection(config('MONGO_PLAYER_HITTING_COLLECTION'))
+team_hitting_collection = db.get_collection(config('MONGO_TEAM_HITTING_COLLECTION'))
+
 
 # helpers
-def ocurrence_helper(ocurrence) -> dict:
+def player_ocurrence_helper(ocurrence) -> dict:
     return {
         "id": str(ocurrence["_id"]),
         "player": ocurrence["player"],
@@ -30,9 +32,42 @@ def ocurrence_helper(ocurrence) -> dict:
         "OPS": ocurrence["OPS"]
     }
 
-# Retrieve all players present in the database
+
+def team_ocurrence_helper(ocurrence) -> dict:
+    return {
+        "id": str(ocurrence["_id"]),
+        "team": ocurrence["team"],
+        "league": ocurrence["league"],
+        "G": ocurrence["G"],
+        "AB": ocurrence["AB"],
+        "R": ocurrence["R"],
+        "H": ocurrence["H"],
+        "2B": ocurrence["2B"],
+        "3B": ocurrence["3B"],
+        "HR": ocurrence["HR"],
+        "RBI": ocurrence["RBI"],
+        "BB": ocurrence["BB"],
+        "SO": ocurrence["SO"],
+        "SB": ocurrence["SB"],
+        "CS": ocurrence["CS"],
+        "AVG": ocurrence["AVG"],
+        "OBP": ocurrence["OBP"],
+        "SLG": ocurrence["SLG"],
+        "OPS": ocurrence["OPS"]
+    }
+
+
+# Retrieve all players hitting stats present in the database
 async def retrieve_players_hitting_stats():
     players = []
-    async for player in collection.find():
-        players.append(ocurrence_helper(player))
+    async for player in player_hitting_collection.find():
+        players.append(player_ocurrence_helper(player))
     return players
+
+
+# Retrieve all teams hitting stats present in the database
+async def retrieve_teams_hitting_stats():
+    teams = []
+    async for team in team_hitting_collection.find():
+        teams.append(team_ocurrence_helper(team))
+    return teams
