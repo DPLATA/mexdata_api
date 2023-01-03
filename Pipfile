@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
+pymongo = "*"
+motor = "*"
+python-decouple = "*"
 
 [dev-packages]
 
