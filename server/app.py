@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, Body
 from fastapi.encoders import jsonable_encoder
-from database import retrieve_players_hitting_stats
+from server.database import retrieve_players_hitting_stats
 
 
 app = FastAPI()
