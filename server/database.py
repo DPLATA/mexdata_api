@@ -7,6 +7,8 @@ db = client[config('MONGO_DB')]
 player_hitting_collection = db.get_collection(config('MONGO_PLAYER_HITTING_COLLECTION'))
 team_hitting_collection = db.get_collection(config('MONGO_TEAM_HITTING_COLLECTION'))
 
+feature_collection = db.get_collection(config('MONGO_TEAM_MEX_MAP_FEATURE_COLLECTION'))
+
 
 # helpers
 def player_ocurrence_helper(ocurrence) -> dict:
@@ -57,6 +59,15 @@ def team_ocurrence_helper(ocurrence) -> dict:
     }
 
 
+def feature_ocurrence_helper(ocurrence) -> dict:
+    return {
+        "id": str(ocurrence["_id"]),
+        "type": ocurrence["type"],
+        "properties": ocurrence["properties"],
+        "geometry": ocurrence["geometry"]
+    }
+
+
 # Retrieve all players hitting stats present in the database
 async def retrieve_players_hitting_stats():
     players = []
@@ -71,3 +82,11 @@ async def retrieve_teams_hitting_stats():
     async for team in team_hitting_collection.find():
         teams.append(team_ocurrence_helper(team))
     return teams
+
+
+# Retrieve all geoJson features present in the database
+async def retrieve_geojson_feature():
+    geojson_features = []
+    async for feature in feature_collection.find():
+        geojson_features.append(feature_ocurrence_helper(feature))
+    return geojson_features
