@@ -7,8 +7,8 @@ db = client[config('MONGO_DB')]
 player_hitting_collection = db.get_collection(config('MONGO_PLAYER_HITTING_COLLECTION'))
 team_hitting_collection = db.get_collection(config('MONGO_TEAM_HITTING_COLLECTION'))
 
-single_features_collection = db.get_collection(config('MONGO_TEAM_MEX_MAP_SINGLE_FEATURES_COLLECTION'))
-feature_collection_collection = db.get_collection(config('MONGO_TEAM_MEX_MAP_FEATURE_COLLECTION_COLLECTION'))
+single_features_collection = db.get_collection(config('MONGO_MEX_MAP_SINGLE_FEATURES_COLLECTION'))
+feature_collection_collection = db.get_collection(config('MONGO_MEX_MAP_FEATURE_COLLECTION_COLLECTION'))
 
 
 # helpers
