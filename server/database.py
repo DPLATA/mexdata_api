@@ -10,6 +10,7 @@ team_hitting_collection = db.get_collection(config('MONGO_TEAM_HITTING_COLLECTIO
 single_features_collection = db.get_collection(config('MONGO_MEX_MAP_SINGLE_FEATURES_COLLECTION'))
 feature_collection_collection = db.get_collection(config('MONGO_MEX_MAP_FEATURE_COLLECTION_COLLECTION'))
 
+lmb_news_headers_collection = db.get_collection(config('MONGO_MEX_LMB_NEWS_COLLECTION'))
 
 # helpers
 def player_occurrence_helper(occurrence) -> dict:
@@ -77,6 +78,13 @@ def feature_collection_occurrence_helper(occurrence) -> dict:
     }
 
 
+def lmb_news_header_occurrence_helper(occurrence) -> dict:
+    return {
+        "id": str(occurrence["_id"]),
+        "title": occurrence["title"]
+    }
+
+
 # Retrieve hitting stats for all players present in the database
 async def retrieve_players_hitting_stats():
     players = []
@@ -107,3 +115,10 @@ async def retrieve_geojson_all_feature_collections():
     async for feature_collection in feature_collection_collection.find():
         geojson_feature_collections.append(feature_collection_occurrence_helper(feature_collection))
     return geojson_feature_collections
+
+# Retrieve all geoJson feature collections present in the database
+async def retrieve_lmb_news_headers():
+    news_headers = []
+    async for header in lmb_news_headers_collection.find():
+        news_headers.append(lmb_news_header_occurrence_helper(header))
+    return news_headers

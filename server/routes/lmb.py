@@ -3,7 +3,8 @@ from fastapi.encoders import jsonable_encoder
 
 from server.database import (
     retrieve_players_hitting_stats,
-    retrieve_teams_hitting_stats
+    retrieve_teams_hitting_stats,
+    retrieve_lmb_news_headers
 )
 
 from server.models.response import (
@@ -28,3 +29,12 @@ async def get_teams_hitting_stats():
     if teams_hitting_stats:
         return successful_response_model(teams_hitting_stats, "teams hitting stats retrieved successfully")
     return successful_response_model(teams_hitting_stats, "empty list returned")
+
+
+
+@router.get("/news_headers", response_description="lmb news headers from google news retrieved")
+async def get_lmb_news_headers():
+    lmb_news_headers = await retrieve_lmb_news_headers()
+    if lmb_news_headers:
+        return successful_response_model(lmb_news_headers, "lmb news headers from google news retrieved successfully")
+    return successful_response_model(lmb_news_headers, "empty list returned")
