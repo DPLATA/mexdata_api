@@ -89,7 +89,8 @@ def lmb_news_header_complete_occurrence_helper(occurrence) -> dict:
     return {
         "id": str(occurrence["_id"]),
         "title": occurrence["title"],
-        "link": occurrence["link"]
+        "link": occurrence["link"],
+        "tag": occurrence["tag"]
     }
 
 
