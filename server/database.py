@@ -6,6 +6,7 @@ client = motor.AsyncIOMotorClient(MONGO_URI)
 db = client[config('MONGO_DB')]
 player_hitting_collection = db.get_collection(config('MONGO_PLAYER_HITTING_COLLECTION'))
 team_hitting_collection = db.get_collection(config('MONGO_TEAM_HITTING_COLLECTION'))
+team_pitching_collection = db.get_collection(config('MONGO_TEAM_PITCHING_COLLECTION'))
 
 single_features_collection = db.get_collection(config('MONGO_MEX_MAP_SINGLE_FEATURES_COLLECTION'))
 feature_collection_collection = db.get_collection(config('MONGO_MEX_MAP_FEATURE_COLLECTION_COLLECTION'))
@@ -38,7 +39,7 @@ def player_occurrence_helper(occurrence) -> dict:
     }
 
 
-def team_occurrence_helper(occurrence) -> dict:
+def team_hitting_stat_occurrence_helper(occurrence) -> dict:
     return {
         "id": str(occurrence["_id"]),
         "team": occurrence["team"],
@@ -61,6 +62,32 @@ def team_occurrence_helper(occurrence) -> dict:
         "OPS": occurrence["OPS"]
     }
 
+
+def team_pitching_stat_occurrence_helper(occurrence) -> dict:
+    return {
+        "id": str(occurrence["_id"]),
+        "team": occurrence["team"],
+        "league": occurrence["league"],
+        "W": occurrence["W"],
+        "L": occurrence["L"],
+        "ERA": occurrence["ERA"],
+        "G": occurrence["G"],
+        "GS": occurrence["GS"],
+        "CG": occurrence["CG"],
+        "SHO": occurrence["SHO"],
+        "SV": occurrence["SV"],
+        "SVO": occurrence["SVO"],
+        "IP": occurrence["IP"],
+        "H": occurrence["H"],
+        "R": occurrence["R"],
+        "ER": occurrence["ER"],
+        "HR": occurrence["HR"],
+        "HB": occurrence["HB"],
+        "BB": occurrence["BB"],
+        "SO": occurrence["SO"],
+        "WHIP": occurrence["WHIP"],
+        "AVG": occurrence["AVG"]
+    }
 
 def single_features_occurrence_helper(occurrence) -> dict:
     return {
@@ -106,7 +133,15 @@ async def retrieve_players_hitting_stats():
 async def retrieve_teams_hitting_stats():
     teams = []
     async for team in team_hitting_collection.find():
-        teams.append(team_occurrence_helper(team))
+        teams.append(team_hitting_stat_occurrence_helper(team))
+    return teams
+
+
+# Retrieve pitching stats for all teams present in the database
+async def retrieve_teams_pitching_stats():
+    teams = []
+    async for team in team_pitching_collection.find():
+        teams.append(team_pitching_stat_occurrence_helper(team))
     return teams
 
 
