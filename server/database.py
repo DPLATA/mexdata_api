@@ -11,8 +11,9 @@ team_pitching_collection = db.get_collection(config('MONGO_TEAM_PITCHING_COLLECT
 single_features_collection = db.get_collection(config('MONGO_MEX_MAP_SINGLE_FEATURES_COLLECTION'))
 feature_collection_collection = db.get_collection(config('MONGO_MEX_MAP_FEATURE_COLLECTION_COLLECTION'))
 
-lmb_news_headers_collection = db.get_collection(config('MONGO_MEX_LMB_NEWS_COLLECTION'))
-lmb_news_headers_complete_collection = db.get_collection(config('MONGO_MEX_LMB_NEWS_COMPLETE_COLLECTION'))
+sports_news_headers_complete_collection = db.get_collection(config('MONGO_MEX_SPORTING_NEWS_COMPLETE_COLLECTION'))
+politics_news_headers_complete_collection = db.get_collection(config('MONGO_MEX_POLITICAL_NEWS_COMPLETE_COLLECTION'))
+
 
 # helpers
 def player_occurrence_helper(occurrence) -> dict:
@@ -106,13 +107,7 @@ def feature_collection_occurrence_helper(occurrence) -> dict:
     }
 
 
-def lmb_news_header_occurrence_helper(occurrence) -> dict:
-    return {
-        "id": str(occurrence["_id"]),
-        "title": occurrence["title"]
-    }
-
-def lmb_news_header_complete_occurrence_helper(occurrence) -> dict:
+def news_header_complete_occurrence_helper(occurrence) -> dict:
     return {
         "id": str(occurrence["_id"]),
         "title": occurrence["title"],
@@ -161,16 +156,16 @@ async def retrieve_geojson_all_feature_collections():
     return geojson_feature_collections
 
 # Retrieve all geoJson feature collections present in the database
-async def retrieve_lmb_news_headers():
+async def retrieve_sporting_news_complete_headers():
     news_headers = []
-    async for header in lmb_news_headers_collection.find():
-        news_headers.append(lmb_news_header_occurrence_helper(header))
+    async for header in sports_news_headers_complete_collection.find():
+        news_headers.append(news_header_complete_occurrence_helper(header))
     return news_headers
 
 
 # Retrieve all geoJson feature collections present in the database
-async def retrieve_lmb_news_complete_headers():
+async def retrieve_political_news_complete_headers():
     news_headers = []
-    async for header in lmb_news_headers_complete_collection.find():
-        news_headers.append(lmb_news_header_complete_occurrence_helper(header))
+    async for header in politics_news_headers_complete_collection.find():
+        news_headers.append(news_header_complete_occurrence_helper(header))
     return news_headers

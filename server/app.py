@@ -3,6 +3,7 @@ from fastapi import FastAPI, APIRouter, Body
 from fastapi.middleware.cors import CORSMiddleware
 from server.routes.lmb import router as lmb_router
 from server.routes.mex_map import router as mex_map_router
+from server.routes.news_headers import router as news_router
 
 app = FastAPI()
 
@@ -18,6 +19,7 @@ app.add_middleware(
 
 # test motor vs pymongo
 app.include_router(lmb_router, tags=["lmb"], prefix="/lmb")
+app.include_router(news_router, tags=["news_headers"], prefix="/news")
 app.include_router(mex_map_router, tags=["mex_map"], prefix="/mex_map")
 
 @app.get("/")
