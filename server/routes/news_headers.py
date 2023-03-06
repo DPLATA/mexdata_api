@@ -18,7 +18,7 @@ router = APIRouter()
 async def get_lmb_news_headers():
     politics_news_headers = await retrieve_political_news_complete_headers()
     if politics_news_headers:
-        return successful_response_model(politics_news_headers, "politics news headers from google news retrieved successfully")
+        return successful_response_model(politics_news_headers, "mex politics news headers from google news retrieved successfully")
     return successful_response_model(politics_news_headers, "empty list returned")
 
 
